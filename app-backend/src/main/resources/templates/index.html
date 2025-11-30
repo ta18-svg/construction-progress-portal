@@ -1,0 +1,50 @@
+<!-- src/main/resources/templates/index.html -->
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title>工事進捗ポータル - 現場一覧</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+</head>
+<body>
+<header>
+  <h1>工事進捗ポータル</h1>
+</header>
+
+<main>
+  <section>
+    <h2>現場一覧</h2>
+
+    <table>
+      <thead>
+      <tr>
+        <th>現場名</th>
+        <th>工期</th>
+        <th>場所</th>
+        <th>発注者</th>
+        <th>担当</th>
+        <th>進捗率</th>
+        <th>詳細</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="site : ${sites}">
+        <td th:text="${site.name}">広島物流倉庫 新築工事</td>
+        <td th:text="${site.period}">2025-10-01 ～ 2026-03-31</td>
+        <td th:text="${site.location}">広島県広島市…</td>
+        <td th:text="${site.owner}">山陰パナソニック株式会社</td>
+        <td th:text="${site.manager}">佐藤 現場代理人</td>
+        <td>
+          <span th:text="${site.progressPercent}">65</span>%
+        </td>
+        <td>
+          <!-- ここをクリックすると /sites/{id} に遷移 -->
+          <a th:href="@{/sites/{id}(id=${site.id})}">詳細を見る</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>

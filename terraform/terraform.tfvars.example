@@ -1,0 +1,25 @@
+# ===============================
+# Azure 認証情報（Service Principal 用）
+# ===============================
+
+subscription_id = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+client_id       = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy"   # az ad sp create-for-rbac の appId
+client_secret   = "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"       # パスワード / シークレット
+tenant_id       = "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+
+
+# ===============================
+# Azure リソース作成に必要な変数
+# ===============================
+
+# リージョン（変えたいときだけ上書き）
+location = "japaneast"
+
+# プロジェクト名（リソース名の prefix）
+project_name = "cp-portal"
+
+# VM の管理ユーザー名
+admin_username = "azureuser"
+
+# SSH 公開鍵（あなたの Windows or WSL の ~/.ssh/id_rsa.pub 内の内容をコピペ）
+admin_ssh_public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDx0.....あなたの公開鍵..... user@PC"

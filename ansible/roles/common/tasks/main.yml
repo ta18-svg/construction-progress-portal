@@ -1,0 +1,111 @@
+---
+# Debian系(Ubuntuなど)のサーバに Docker + Docker Compose プラグインを
+# インストール＆基本設定するための共通ロール用タスク例
+
+# APTパッケージ情報(キャッシュ)を最新にする
+- name: Update apt cache
+  # apt モジュールを使用
+  ansible.builtin.apt:
+    # apt-get update 相当を実行
+    update_cache: yes
+  # Debian系OSのときだけ実行(Ubuntuなど)
+  when: ansible_os_family == "Debian"
+# ベースとなる共通パッケージをインストール
+- name: Install base packages
+  ansible.builtin.apt:
+    # インストールするパッケージ一覧
+    name:
+      - git
+      # HTTPでファイル取得するツール（後続のcurlにも使用）
+      - curl
+      # HTTPS通信に必要なCA証明書
+      - ca-certificates
+      # GPGキー管理ツール（DockerのGPGキー登録に使用）
+      - gnupg
+      # OSディストリ情報取得コマンド(lsb_release)用
+      - lsb-release
+    # これらのパッケージが「入っている状態」にする
+    state: present
+  when: ansible_os_family == "Debian"
+# Docker公式リポジトリのGPGキーを登録
+- name: Add Docker GPG key
+  # shellではなくcommandモジュールでコマンド実行
+  # 1) /etc/apt/keyrings ディレクトリを作成(なければ)
+  # 2) Docker用GPG鍵をダウンロード
+  # 3) gpg形式に変換して保存
+  # 4) すべてのユーザーが読めるよう権限付与
+  ansible.builtin.shell: |
+    install -m 0755 -d /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+      gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    chmod a+r /etc/apt/keyrings/docker.gpg
+  args:
+    # このファイルが既に存在する場合は実行しない(冪等性)
+    creates: /etc/apt/keyrings/docker.gpg
+    # bash で実行（パイプや \ をちゃんと解釈させる）
+    executable: /bin/bash                   
+  # Debian系のみ対象
+  when: ansible_os_family == "Debian"
+# Docker公式のAPTリポジトリ設定を追加
+- name: Add Docker APT repository
+  ansible.builtin.copy:
+    # APTリポジトリ設定ファイルの保存先
+    # ファイルの中身をここに直接記述
+    dest: /etc/apt/sources.list.d/docker.list
+     # 1) アーキテクチャ amd64
+     # 2) GPGキーとして /etc/apt/keyrings/docker.gpg を使用
+     # 3) Ubuntu用Docker公式リポジトリURL
+     # 4) {{ ansible_lsb.codename }} はUbuntuのコード名(focal等)
+     # 5) stable チャンネルを使用
+    content: |
+      deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable
+  when: ansible_os_family == "Debian"
+# Dockerリポジトリ追加後に再度apt更新
+- name: Update apt cache after adding Docker repo
+  ansible.builtin.apt:
+    # 新しいリポジトリのパッケージ情報を取得
+    update_cache: yes
+  when: ansible_os_family == "Debian"
+# Docker本体とComposeプラグインをインストール
+- name: Install Docker and compose plugin
+  ansible.builtin.apt:
+    name:
+      # Docker Community Edition 本体
+      - docker-ce
+      # Docker CLI
+      - docker-ce-cli
+      # コンテナランタイム(containerd)
+      - containerd.io
+      # docker buildx 用プラグイン
+      - docker-buildx-plugin
+      # `docker compose` コマンド用プラグイン
+      - docker-compose-plugin
+    # これらのパッケージがインストールされた状態にする
+    state: present
+  when: ansible_os_family == "Debian"
+# Dockerサービスを起動＆自動起動有効化
+- name: Ensure Docker service is running
+  ansible.builtin.service:
+    # 対象サービス名
+    name: docker
+    # 起動状態にする(systemctl start docker相当)
+    state: started
+    # OS起動時に自動起動するよう有効化
+    enabled: yes
+# アプリ用ユーザーを作成しdockerグループに参加
+- name: Ensure app user exists and is in docker group
+  ansible.builtin.user:
+    # 変数 app_user の名前でユーザーを作成/更新
+    name: "{{ app_user }}"
+    # docker グループに所属させる
+    groups: docker
+    # 既存のグループを消さずに docker を追加
+    append: yes
+    # ホームディレクトリ(例: /home/appuser)を作成
+    create_home: yes
+# サーバーのタイムゾーンを日本時間(Asia/Tokyo)に設定
+- name: Set timezone to Asia/Tokyo
+  # timedatectl コマンドでタイムゾーン変更
+  ansible.builtin.command: timedatectl set-timezone Asia/Tokyo
+  # Ansible上は「いつも変更なし」と扱う(冪等性のための簡易指定)
+  changed_when: false

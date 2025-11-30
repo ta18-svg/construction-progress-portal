@@ -1,0 +1,191 @@
+/* =========================
+   全体レイアウト・共通設定
+   ========================= */
+   * {
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    margin: 0;
+    padding: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      "Helvetica Neue", Arial, "Noto Sans JP", sans-serif;
+    background-color: #f4f6f9;
+    color: #333;
+  }
+  
+  body {
+    line-height: 1.5;
+  }
+  
+  /* =========================
+     ヘッダー
+     ========================= */
+  header {
+    background: linear-gradient(135deg, #1976d2, #42a5f5);
+    color: #fff;
+    padding: 16px 24px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    letter-spacing: 0.05em;
+  }
+  
+  /* =========================
+     メインレイアウト
+     ========================= */
+  main {
+    max-width: 1080px;
+    margin: 24px auto 40px;
+    padding: 0 16px;
+  }
+  
+  /* セクションのカード風デザイン */
+  section {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  }
+  
+  section h2,
+  section h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+    color: #1976d2;
+  }
+  
+  /* 現場サマリー部分 */
+  section p {
+    margin: 4px 0;
+    font-size: 0.95rem;
+  }
+  
+  /* 「戻る」リンクなど */
+  a {
+    color: #1976d2;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  /* =========================
+     テーブル
+     ========================= */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 0.95rem;
+  }
+  
+  thead {
+    background-color: #e3f2fd;
+  }
+  
+  th,
+  td {
+    border: 1px solid #e0e0e0;
+    padding: 8px 10px;
+    text-align: left;
+  }
+  
+  th {
+    font-weight: 600;
+    color: #424242;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #fafafa;
+  }
+  
+  tbody tr:hover {
+    background-color: #e3f2fd;
+  }
+  
+  /* 現場一覧テーブルの「詳細」リンクボタン風 */
+  .table-link-btn a {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid #1976d2;
+    color: #1976d2;
+    font-size: 0.85rem;
+    text-decoration: none;
+  }
+  
+  .table-link-btn a:hover {
+    background-color: #1976d2;
+    color: #fff;
+  }
+  
+  /* =========================
+     バッジ（ステータス表示）
+     ========================= */
+  .badge {
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.8rem;
+  }
+  
+  /* done / warning / info は statusType に合わせる */
+  .done {
+    background-color: #43a047; /* 緑：完了 */
+  }
+  
+  .warning {
+    background-color: #ffb300; /* 黄：注意 */
+    color: #333;
+  }
+  
+  .info {
+    background-color: #1e88e5; /* 青：情報 */
+  }
+  
+  /* =========================
+     レスポンシブ対応（スマホ）
+     ========================= */
+  @media (max-width: 768px) {
+    header {
+      padding: 12px 16px;
+    }
+  
+    header h1 {
+      font-size: 1.1rem;
+    }
+  
+    main {
+      padding: 0 10px;
+    }
+  
+    section {
+      padding: 12px 14px;
+    }
+  
+    table,
+    thead,
+    tbody,
+    th,
+    td,
+    tr {
+      font-size: 0.85rem;
+    }
+  
+    th,
+    td {
+      padding: 6px;
+    }
+  }
+  

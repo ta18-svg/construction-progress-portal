@@ -1,0 +1,69 @@
+---
+# アプリ用のディレクトリを作成し、
+# Spring Boot の JAR・Dockerfile・docker-compose.yml を配置して
+# 最後に docker compose up -d --build を実行するロールのタスク
+
+# アプリのベースディレクトリ(ルート)を作成
+- name: Create base directory
+  # file モジュールでファイル/ディレクトリを管理
+  ansible.builtin.file:
+    path: "{{ app_base_dir }}"
+    # 「ディレクトリ」である状態にする（なければ作成）
+    state: directory
+    # 所有者ユーザー
+    owner: "{{ app_user }}"
+    # 所有グループ（
+    group: "{{ app_user }}"
+    # パーミッション
+    mode: "0755"
+# アプリ本体(JARやDockerfile)用のサブディレクトリ作成
+- name: Create app directory
+  ansible.builtin.file:
+    path: "{{ app_base_dir }}/app"
+    state: directory
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "0755"
+# ビルド済みの Spring Boot JAR をリモートへコピー
+- name: Copy Spring Boot jar
+  ansible.builtin.copy:
+    # コントロールノード側のJARパス
+    src: "{{ jar_local_path }}"
+    # リモート上の配置先 & ファイル名
+    dest: "{{ app_base_dir }}/app/{{ jar_file_name }}"
+    # コピー後のファイル所有者・所有グループ
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    # パーミッション
+    mode: "0644"
+# アプリ用 Dockerfile をリモートへコピー
+- name: Copy Dockerfile for app
+  ansible.builtin.copy:
+    # コントロールノード側の Dockerfile パス
+    src: "{{ dockerfile_local_path }}"
+    # リモート上の配置先
+    dest: "{{ app_base_dir }}/app/Dockerfile"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "0644"
+# docker-compose.yml をリモートへ配置
+- name: Copy docker-compose.yml
+  ansible.builtin.copy:
+    # ロール(またはplaybook)側に置いた compose ファイル
+    src: "docker-compose.yml"
+    # コピー先
+    dest: "{{ app_base_dir }}/docker-compose.yml"
+    owner: "{{ app_user }}"
+    group: "{{ app_user }}"
+    mode: "0644"
+# Docker Compose でコンテナをビルド & バックグラウンド起動
+- name: Run docker compose up -d --build
+  # -d: デタッチモード(バックグラウンド)
+  # --build: イメージを毎回ビルドしてから起動
+  ansible.builtin.command: docker compose up -d --build
+  args:
+    # 実行ディレクトリを app_base_dir に変更してコマンド実行
+    chdir: "{{ app_base_dir }}"
+   # → /opt/cp-portal に cd してから
+   # `docker compose up -d --build` を実行する
+

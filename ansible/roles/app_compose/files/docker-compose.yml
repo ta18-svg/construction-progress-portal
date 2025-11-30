@@ -1,0 +1,38 @@
+#version: "3.9"
+
+services:
+  app:
+    container_name: cp-portal-app
+    # このサービス用の Docker イメージを「ビルドする」設定
+    build:
+      # ビルドコンテキスト（Dockerfile 実行時のカレントディレクトリ）
+      # → ./app ディレクトリ配下のファイル一式が Docker build に渡される
+      context: ./app
+      # 使用する Dockerfile のファイル名
+      # → ./app/Dockerfile を使ってイメージをビルドする
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    # コンテナ内の環境変数を1つ設定
+    # Spring Boot 用のプロファイル指定
+    # → application-prod.yml など「本番用設定」を有効にする
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+    # コンテナの再起動ポリシー
+    # always:
+    #   - コンテナが落ちたら常に再起動
+    #   - Docker デーモン再起動後も自動的に起動
+    # 本番運用でのシンプルな自己回復設定としてよく使われる
+    restart: always
+
+  # 将来 FastAPI を追加する場合
+  # worker:
+  #   container_name: cp-portal-worker
+  #   build:
+  #     context: ./worker
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "8000:8000"
+  #   restart: always
+
+

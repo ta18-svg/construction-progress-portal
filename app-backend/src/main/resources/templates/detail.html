@@ -1,0 +1,66 @@
+<!-- src/main/resources/templates/detail.html -->
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${site.name} + ' - 工事進捗詳細'">工事進捗詳細</title>
+  <link rel="stylesheet" th:href="@{/css/styles.css}" />
+  <style>
+    table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+    th, td { border: 1px solid #ccc; padding: 8px; }
+    .badge { padding: 4px 8px; border-radius: 4px; color: white; font-weight: bold; }
+    .done { background: #4CAF50; }
+    .warning { background: #FFC107; color: #333; }
+    .info { background: #2196F3; }
+  </style>
+</head>
+<body>
+<header>
+  <h1>工事進捗ポータル</h1>
+</header>
+
+<main>
+  <!-- 現場サマリー（ヘッダ部分） -->
+  <section>
+    <h2 th:text="${site.name}">広島物流倉庫 新築工事</h2>
+    <p>工期: <span th:text="${site.period}">2025-10-01 ～ 2026-03-31</span></p>
+    <p>場所: <span th:text="${site.location}">広島県広島市…</span></p>
+    <p>発注者: <span th:text="${site.owner}">山陰パナソニック株式会社</span></p>
+    <p>担当: <span th:text="${site.manager}">佐藤 現場代理人</span></p>
+    <p>進捗率: <span th:text="${site.progressPercent}">65</span>%</p>
+    <p><a th:href="@{/}">← 現場一覧に戻る</a></p>
+  </section>
+
+  <!-- 日別進捗一覧 -->
+  <section>
+    <h3>日別の進捗</h3>
+    <table>
+      <thead>
+      <tr>
+        <th>日付</th>
+        <th>工程</th>
+        <th>作業内容</th>
+        <th>担当</th>
+        <th>進捗</th>
+        <th>ステータス</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="row : ${progressList}">
+        <td th:text="${row.date}">2025-11-18</td>
+        <td th:text="${row.phase}">基礎工</td>
+        <td th:text="${row.work}">捨てコン打設</td>
+        <td th:text="${row.person}">佐藤</td>
+        <td th:text="${row.progress}">100%</td>
+        <td>
+          <span class="badge"
+                th:classappend="${row.statusType}"
+                th:text="${row.statusType}">done</span>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>

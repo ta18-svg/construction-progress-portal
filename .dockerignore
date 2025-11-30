@@ -1,0 +1,63 @@
+# =========================
+# Git / VCS
+# =========================
+.git
+.gitignore
+
+# =========================
+# エディタ・IDE
+# =========================
+.vscode
+.idea
+*.iml
+
+# =========================
+# OSごみ
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# Terraform
+# =========================
+.terraform
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
+# =========================
+# Ansible
+# =========================
+ansible/
+*.pem
+*.key
+
+# =========================
+# ドキュメント
+# =========================
+docs/
+
+# =========================
+# Java / Maven (app-backend)
+# =========================
+app-backend/target/
+app-backend/.*classpath
+app-backend/.*project
+
+# jar だけイメージに持ち込みたい場合は、↑の代わりに↓にする
+# app-backend/target/*
+# !app-backend/target/*.jar
+
+# =========================
+# Python（future-python-worker 想定）
+# =========================
+future-python-worker/__pycache__/
+future-python-worker/.venv/
+future-python-worker/*.pyc
+future-python-worker/.env
+
+# =========================
+# Docker 関連（不要な compose など）
+# =========================
+docker-compose.local.yml
+docker-compose.override.yml

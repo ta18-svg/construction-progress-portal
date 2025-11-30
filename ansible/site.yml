@@ -1,0 +1,31 @@
+---
+# このファイルは「建設工事進捗ポータル」を Azure VM 上に
+# Docker Compose でセットアップするための Ansible プレイブック
+
+# プレイブック全体の説明用ラベル（名前）
+- name: Setup construction progress portal on Azure VM (Docker Compose)
+  # 対象となるインベントリグループ（web グループのホスト）
+  hosts: web
+  # sudo で権限昇格して実行（root 権限が必要なタスクがあるため）
+  become: true
+
+  # このプレイブック内で使う変数の定義ブロック
+  vars:
+    # アプリケーション用の Linux ユーザー名（ファイル所有者などに使う想定）
+    app_user: "appuser"
+    # アプリ一式を配置するベースディレクトリ（アプリのホームディレクトリの場所）
+    app_base_dir: "/opt/cp-portal"
+    # デプロイ先で使用する JAR ファイルのファイル名
+    jar_file_name: "construction-progress-portal.jar"
+    # コントロールノード側に存在するビルド済み JAR のパス
+    # 例：ローカルで mvn package した成果物の場所
+    jar_local_path: "../app-backend/target/app.jar"
+    # コントロールノード側にある Dockerfile のパス
+    # これをリモートホストに転送して docker build する想定
+    dockerfile_local_path: "../app-backend-docker/Dockerfile"
+  # このプレイブックで実行するロールの一覧
+  roles:
+    # 共通設定を行うロール（例：パッケージ更新、docker のインストールなど）
+    - role: common
+    # アプリ専用ロール（JAR の配置、Dockerfile 配置、docker-compose.yml 配置＆起動など）
+    - role: app_compose

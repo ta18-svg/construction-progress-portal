@@ -1,0 +1,114 @@
+###############################################################################
+# 基本方針
+# - テキストファイルはすべて LF に統一
+# - Windowsでのみ必要なバッチファイルだけ CRLF にする
+# - 画像やアーカイブなどはバイナリ扱い（差分を取らない）
+###############################################################################
+
+# デフォルト：すべてのテキストファイルを LF に統一
+* text eol=lf
+
+###############################################################################
+# OS / 実行ファイル系
+###############################################################################
+
+# Windows バッチファイルは CRLF（Windowsの仕様に合わせる）
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# それ以外のスクリプト類は LF（Linux / WSL / コンテナ向け）
+*.sh  text eol=lf
+*.ps1 text eol=lf
+
+###############################################################################
+# ソースコード / 設定ファイル（LF 統一）
+###############################################################################
+
+# Java / Spring Boot
+*.java   text eol=lf
+*.kt     text eol=lf
+*.groovy text eol=lf
+
+# ビルド / 依存関係
+pom.xml                text eol=lf
+*.gradle               text eol=lf
+*.gradle.kts           text eol=lf
+*.lock                 text eol=lf
+*.lock.hcl             text eol=lf
+.terraform.lock.hcl    text eol=lf
+
+# Terraform
+*.tf       text eol=lf
+*.tfvars   text eol=lf
+*.tfstate  text eol=lf
+*.tfstate.* text eol=lf
+
+# Ansible
+*.yml      text eol=lf
+*.yaml     text eol=lf
+ansible.cfg text eol=lf
+inventory* text eol=lf
+
+# Docker / Compose
+Dockerfile*             text eol=lf
+*.dockerfile            text eol=lf
+docker-compose*.yml     text eol=lf
+docker-compose*.yaml    text eol=lf
+
+# Shell / 各種設定ファイル
+*.env      text eol=lf
+*.conf     text eol=lf
+*.cfg      text eol=lf
+*.ini      text eol=lf
+*.properties text eol=lf
+
+# ドキュメント / マークダウン
+*.md       text eol=lf
+*.markdown text eol=lf
+*.txt      text eol=lf
+
+# Webリソースなど
+*.html   text eol=lf
+*.css    text eol=lf
+*.js     text eol=lf
+*.json   text eol=lf
+*.xml    text eol=lf
+
+###############################################################################
+# バイナリファイル（差分を取らない）
+###############################################################################
+
+# 画像
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.bmp  binary
+*.ico  binary
+*.svg  binary
+
+# フォント
+*.ttf  binary
+*.otf  binary
+*.woff binary
+*.woff2 binary
+
+# アーカイブ / バイナリ
+*.zip  binary
+*.tar  binary
+*.gz   binary
+*.tgz  binary
+*.rar  binary
+*.7z   binary
+
+# Java の生成物 / ライブラリ
+*.class binary
+*.jar   binary
+*.war   binary
+*.ear   binary
+
+# その他バイナリ
+*.exe  binary
+*.dll  binary
+*.so   binary
+*.dylib binary
