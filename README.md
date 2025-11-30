@@ -137,9 +137,9 @@ terraform plan
 terraform apply
 確認プロンプトに：yes と入力
 ##### 出力確認（Outputs）
-自動設定されたパブリックIPアドレス
-vm_public_ip = "20.xxx.xxx.xxx"
-SSH接続用のコマンド
+自動設定されたパブリックIPアドレス<br>
+vm_public_ip = "20.xxx.xxx.xxx"<br>
+SSH接続用のコマンド<br>
 ssh_example  = "ssh azureuser@20.xxx.xxx.xxx"
 #### 2.5 Azure ポータルでリソース確認
 - cp-portal-rg（RG）
@@ -156,20 +156,20 @@ terraform destroy
 ### 3. Ansible による構築手順（Azure VM）
 Terraform によって作成された Azure VM に対して設定を行う。
 #### 3.1 Terraform で Public IP の確認
-cd construction-progress-portal/terraform
+cd construction-progress-portal/terraform<br>
 terraform output
 #### 3.2 inventory.ini の設定
 [cp_portal]
 cp-portal-vm ansible_host=パブリックIPアドレス
 #### WSLの Linux 側に ansible フォルダを移す
-mkdir -p ~/ansible
+mkdir -p ~/ansible<br>
 cp -r /mnt/c/Users/PC_User/Desktop/construction-progress-portal/ansible/* ~/ansible/
 #### 3.3 Ansible 接続テスト
 ansible cp_portal -m ping
 #### 3.4 Ansible 実行（初期設定＋Docker環境構築）
 ansible-playbook site.yml
 #### 3.5 Docker コンテナ起動確認
-ssh azureuser@<PublicIP>
+ssh azureuser@PublicIP <br>
 sudo docker ps
 #### 3.6 Web アクセス確認
 http://パブリックIPアドレス
