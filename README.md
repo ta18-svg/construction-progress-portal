@@ -6,20 +6,20 @@
 
 ## 2. 使用技術
 ### 2-1.アプリケーション
-・Java 17
-・Spring Boot 3
-・Maven（ビルド / 依存関係管理）
-・Thymeleaf
+- Java 17
+- Spring Boot 3
+- Maven（ビルド / 依存関係管理）
+- Thymeleaf
 ### 2-2.インフラ
-・Azure Virtual Machine（Ubuntu）
-・Azure Virtual Network / Subnet
-・Azure Network Security Group（NSG）
-・Azure Public IP
+- Azure Virtual Machine（Ubuntu）
+- Azure Virtual Network / Subnet
+- Azure Network Security Group（NSG）
+- Azure Public IP
 ### 2-3.コンテナ
 ・Docker / Docker Compose
 ### 2-4.IaC / 構成管理（Infrastructure as Code）
-・Terraform（Azureリソース構築）
-・Ansible（VM 構成管理・アプリデプロイ）
+- Terraform（Azureリソース構築）
+- Ansible（VM 構成管理・アプリデプロイ）
 ### 2-5.補足
 Spring Boot + MySQL を Docker で動かし、
 Azure 上の VM に Terraform & Ansible で自動構築・デプロイする、
